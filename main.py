@@ -14,7 +14,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SAMPLE_SPREADSHEET_ID = '1FZIKElgO5_91rSUsapcV_OIrAwDRMHJ4H_Gjn0ia0og'
 SAMPLE_RANGE_NAME = 'sheet_1!A1:C3'
 
-def main():
+def connect_sheet():
     """Shows basic usage of the Sheets API.
     Prints values from a sample spreadsheet.
     """
@@ -41,8 +41,9 @@ def main():
 
     # Call the Sheets API
     sheet = service.spreadsheets()
-    #result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
-    #                            range=SAMPLE_RANGE_NAME).execute()
+    return sheet
+
+def append_sheet(sheet):
     humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT22, 18)
     date = datetime.now().strftime('%F')
     time = datetime.now().strftime('%T')
@@ -52,22 +53,14 @@ def main():
         time,
         temperature,
         humidity]]}
+    
     result = sheet.values().append(
             spreadsheetId=SAMPLE_SPREADSHEET_ID,
             range=SAMPLE_RANGE_NAME,
             valueInputOption='USER_ENTERED',
             insertDataOption='INSERT_ROWS',
             body=body).execute()
-    #values = result.get('values', [])
-    #                            range=SAMPLE_RANGE_NAME).execute()
-
-    #if not values:
-    #    print('No data found.')
-    #else:
-    #    print('Name, Major:')
-    #    for row in values:
-    #        # Print columns A and E, which correspond to indices 0 and 4.
-    #        print('%s, %s' % (row[0], row[2]))
 
 if __name__ == '__main__':
-    main()
+    sheet = connect_sheet()
+    append_sheet(sheet)
