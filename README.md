@@ -16,5 +16,6 @@ it took me a while to figure out that the token.pickle file needed to be deleted
 the credentials.json have to be in the root folder of the repo as well. you can obtain them via the quickstart url above.
 
 ## cron syntax
-for every 5 minutes, this might wat you want
-`*/5 * * * * /usr/bin/python3 ~/devel/dht22_to_spreadsheet/main.py >> ~/devel/log.log 2>&1`
+for every 5 minutes, this might wat you want:
+`*/5 * * * * cd /home/pi/devel/dht22_to_spreadsheet; /usr/bin/python3 main.py >> /home/pi/devel/log.log 2>&1`
+the `cd` is needed for the credentials and token file to be found..
